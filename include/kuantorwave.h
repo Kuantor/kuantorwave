@@ -22,7 +22,9 @@
 extern "C" {
 #endif
 
-#if defined(_WIN32)
+#if defined(KW_STATIC)
+#  define KW_API /* static linking: no import/export decoration */
+#elif defined(_WIN32)
 #  if defined(KW_BUILD_DLL)
 #    define KW_API __declspec(dllexport)
 #  else

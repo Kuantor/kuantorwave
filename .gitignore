@@ -1,0 +1,8 @@
+build/
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+fx_*.bin
+fx_*.mp3
