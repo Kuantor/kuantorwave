@@ -8,8 +8,12 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # library target will be added once the full API surface is implemented.
 add_library(kuantorwave_core STATIC
     core/src/detect/kw_detect.c
+    core/src/pcm/kw_pcm.c
 )
 target_include_directories(kuantorwave_core PUBLIC include)
+# Module-internal headers (e.g. pcm/kw_pcm_internal.h) are visible to other
+# core modules and to the unit tests, but not part of the public API.
+target_include_directories(kuantorwave_core PUBLIC core/src/pcm)
 target_compile_definitions(kuantorwave_core PUBLIC KW_STATIC)
 
 if(MSVC)
@@ -30,3 +34,13 @@ else()
 endif()
 
 add_test(NAME detect COMMAND test_detect)
+
+add_executable(test_pcm tests/test_pcm.c)
+target_link_libraries(test_pcm PRIVATE kuantorwave_core)
+if(MSVC)
+    target_compile_options(test_pcm PRIVATE /W4 /WX)
+else()
+    target_compile_options(test_pcm PRIVATE -Wall -Wextra -Werror)
+endif()
+
+add_test(NAME pcm COMMAND test_pcm)
